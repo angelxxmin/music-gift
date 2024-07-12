@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Gift</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Send a Music Gift</h1>
+        <form id="musicForm">
+            <input type="url" id="musicLink" placeholder="Enter music link" required>
+            <textarea id="personalMessage" placeholder="Enter your message" rows="4" required></textarea>
+            <button type="submit">Generate Link</button>
+        </form>
+        <div id="result" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        document.getElementById('musicForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const musicLink = document.getElementById('musicLink').value;
+            const personalMessage = document.getElementById('personalMessage').value;
+            const resultDiv = document.getElementById('result');
+            const encodedMessage = encodeURIComponent(personalMessage);
+            const generatedLink = `${window.location.href}?music=${musicLink}&message=${encodedMessage}`;
+            resultDiv.innerHTML = `<p>Share this link:</p><a href="${generatedLink}" target="_blank">${generatedLink}</a>`;
+        });
+
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const musicLink = urlParams.get('music');
+            const message = urlParams.get('message');
+            if (musicLink && message) {
+                document.body.innerHTML = `
+                    <div class="container">
+                        <h1>Your Music Gift</h1>
+                        <p><a href="${musicLink}" target="_blank">Listen to the music</a></p>
+                        <p>Message: ${decodeURIComponent(message)}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
